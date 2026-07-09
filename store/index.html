@@ -32,6 +32,7 @@
     body {
       margin: 0;
       min-height: 100vh;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 93% 19%, rgba(7, 95, 240, .06), transparent 24%),
         linear-gradient(180deg, #ffffff 0%, #fbfdff 52%, #ffffff 100%);
@@ -45,14 +46,14 @@
     .page {
       width: min(100%, 1480px);
       margin: 0 auto;
-      padding: 24px clamp(18px, 3.5vw, 38px) 32px;
+      padding: 20px clamp(14px, 3vw, 38px) 32px;
     }
 
     .store-header {
       display: grid;
-      grid-template-columns: auto minmax(360px, 1fr) minmax(240px, 320px) auto;
+      grid-template-columns: auto minmax(0, 1fr) minmax(220px, 320px) auto;
       align-items: center;
-      gap: 26px;
+      gap: clamp(14px, 2vw, 26px);
       padding-bottom: 14px;
       border-bottom: 1px solid var(--line);
     }
@@ -74,7 +75,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: clamp(16px, 3vw, 52px);
+      gap: clamp(14px, 2.4vw, 38px);
       min-width: 0;
     }
 
@@ -85,7 +86,7 @@
       align-items: center;
       border-bottom: 4px solid transparent;
       color: var(--ink);
-      font-size: 15px;
+      font-size: clamp(13px, 1vw, 15px);
       font-weight: 900;
       text-decoration: none;
       white-space: nowrap;
@@ -175,12 +176,12 @@
 
     .hero {
       margin-top: 30px;
-      min-height: 290px;
+      min-height: 270px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(360px, 48%);
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 42%);
       gap: 26px;
       align-items: center;
-      padding: clamp(28px, 4vw, 46px) clamp(28px, 4.8vw, 66px);
+      padding: clamp(24px, 4vw, 44px) clamp(20px, 4.8vw, 58px);
       border: 1px solid var(--line);
       border-radius: 12px;
       background:
@@ -212,7 +213,7 @@
     .hero-points {
       display: flex;
       flex-wrap: wrap;
-      gap: 28px;
+      gap: clamp(14px, 2.2vw, 28px);
       margin-top: 34px;
     }
 
@@ -221,7 +222,7 @@
       grid-template-columns: 44px 1fr;
       gap: 12px;
       align-items: center;
-      min-width: 180px;
+      min-width: min(190px, 100%);
     }
 
     .point-icon {
@@ -259,7 +260,7 @@
       position: absolute;
       top: 24px;
       left: 10px;
-      width: min(390px, 78%);
+      width: min(390px, 76%);
       height: 210px;
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -375,21 +376,22 @@
 
     .app-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
       gap: 22px;
     }
 
     .app-card {
       display: grid;
-      grid-template-columns: 96px minmax(0, 1fr) 116px;
+      grid-template-columns: auto minmax(0, 1fr) minmax(104px, auto);
       gap: 16px;
       align-items: center;
-      min-height: 164px;
+      min-height: 154px;
       padding: 18px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--panel);
       box-shadow: 0 10px 24px rgba(22, 58, 117, .05);
+      min-width: 0;
     }
 
     .app-card h3 {
@@ -411,6 +413,7 @@
     .card-actions {
       display: grid;
       gap: 12px;
+      min-width: 104px;
     }
 
     .button {
@@ -447,11 +450,11 @@
     }
 
     .app-icon {
-      width: 88px;
-      height: 88px;
+      width: clamp(68px, 6vw, 88px);
+      height: clamp(68px, 6vw, 88px);
       display: grid;
       place-items: center;
-      border-radius: 18px;
+      border-radius: clamp(14px, 1.4vw, 18px);
       color: #fff;
       font-size: 30px;
       font-weight: 900;
@@ -509,7 +512,7 @@
 
     .recommend-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
       gap: 22px;
     }
 
@@ -523,7 +526,7 @@
 
     .app-row {
       display: grid;
-      grid-template-columns: 58px minmax(0, 1fr) auto auto;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
       align-items: center;
       gap: 16px;
       min-height: 82px;
@@ -564,7 +567,7 @@
 
     .update-row {
       display: grid;
-      grid-template-columns: 58px 190px 78px 78px minmax(0, 1fr) 70px;
+      grid-template-columns: auto minmax(120px, 170px) auto auto minmax(0, 1fr) auto;
       align-items: center;
       gap: 14px;
       min-height: 62px;
@@ -630,9 +633,7 @@
       .menu-button { display: grid; }
       .search { grid-column: 1 / -1; }
       .hero { grid-template-columns: 1fr; }
-      .hero-visual { min-height: 190px; }
-      .app-grid { grid-template-columns: 1fr; }
-      .recommend-grid { grid-template-columns: 1fr; }
+      .hero-visual { min-height: 190px; max-width: 560px; }
       .update-row { grid-template-columns: 52px 1fr auto; }
       .update-row .version,
       .update-row .new,
@@ -668,6 +669,7 @@
       .card-actions {
         grid-column: 1 / -1;
         grid-template-columns: 1fr 1fr;
+        min-width: 0;
       }
       .app-row {
         grid-template-columns: 52px 1fr auto;
