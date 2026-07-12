@@ -39,6 +39,12 @@
       color: var(--text);
     }
 
+    body.consent-required { overflow: hidden; }
+    body.consent-required #storePage {
+      pointer-events: none;
+      user-select: none;
+    }
+
     a { color: inherit; }
     button, input { font: inherit; }
     button { cursor: pointer; }
@@ -993,8 +999,8 @@
     }
   </style>
 </head>
-<body id="top">
-  <div class="page" id="storePage" inert>
+<body id="top" class="consent-required">
+  <div class="page" id="storePage">
     <header class="store-header">
       <a class="brand" href="#top" aria-label="IDS Store ホーム">
         <img src="../assets/ids-store-logo.png" alt="IDS Store">
@@ -1266,17 +1272,27 @@
     };
 
     const enableStore = () => {
-      storePage.removeAttribute("inert");
+      document.body.classList.remove("consent-required");
       if (consentDialog.open) consentDialog.close();
     };
 
-    if (hasSavedConsent()) {
-      enableStore();
-    } else if (typeof consentDialog.showModal === "function") {
-      consentDialog.showModal();
-    } else {
-      consentDialog.setAttribute("open", "");
-    }
+    const initializeConsentGate = () => {
+      if (hasSavedConsent()) {
+        enableStore();
+        return;
+      }
+
+      document.body.classList.add("consent-required");
+      try {
+        if (typeof consentDialog.showModal === "function") {
+          consentDialog.showModal();
+        } else {
+          consentDialog.setAttribute("open", "");
+        }
+      } catch (error) {
+        consentDialog.setAttribute("open", "");
+      }
+    };
 
     acceptConsent.addEventListener("click", () => {
       if (rememberConsent.checked) {
@@ -1462,6 +1478,12 @@
         setMenuOpen(false);
       }
     });
+
+    window.addEventListener("pageshow", () => {
+      if (hasSavedConsent()) enableStore();
+    });
+
+    initializeConsentGate();
   </script>
 </body>
 </html>
