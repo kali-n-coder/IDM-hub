@@ -1276,13 +1276,9 @@
       if (consentDialog.open) consentDialog.close();
     };
 
-    const initializeConsentGate = () => {
-      if (hasSavedConsent()) {
-        enableStore();
-        return;
-      }
+    const showConsentDialog = () => {
+      if (consentDialog.open) return;
 
-      document.body.classList.add("consent-required");
       try {
         if (typeof consentDialog.showModal === "function") {
           consentDialog.showModal();
@@ -1292,6 +1288,16 @@
       } catch (error) {
         consentDialog.setAttribute("open", "");
       }
+    };
+
+    const initializeConsentGate = () => {
+      if (hasSavedConsent()) {
+        enableStore();
+        return;
+      }
+
+      document.body.classList.add("consent-required");
+      showConsentDialog();
     };
 
     acceptConsent.addEventListener("click", () => {
@@ -1307,7 +1313,22 @@
 
     consentDialog.addEventListener("cancel", (event) => {
       event.preventDefault();
+      event.stopImmediatePropagation();
     });
+
+    consentDialog.addEventListener("close", () => {
+      if (document.body.classList.contains("consent-required")) {
+        window.setTimeout(showConsentDialog, 0);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && document.body.classList.contains("consent-required")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showConsentDialog();
+      }
+    }, true);
 
     const appData = {
       "organize-memo": {
