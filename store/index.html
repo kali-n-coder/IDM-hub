@@ -39,6 +39,12 @@
       color: var(--text);
     }
 
+    body.consent-required { overflow: hidden; }
+    body.consent-required #storePage {
+      pointer-events: none;
+      user-select: none;
+    }
+
     a { color: inherit; }
     button, input { font: inherit; }
     button { cursor: pointer; }
@@ -126,7 +132,41 @@
       gap: 14px;
     }
 
-    .icon-button,
+    .hub-home-button {
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      border: 1px solid #b9d2ff;
+      border-radius: var(--radius);
+      background: #eef5ff;
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+    }
+
+    .hub-home-button:hover {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .hub-home-button:focus-visible {
+      outline: 3px solid rgba(7, 95, 240, .25);
+      outline-offset: 3px;
+    }
+
+    .hub-home-button .icon {
+      width: 18px;
+      height: 18px;
+    }
+
     .menu-button {
       width: 42px;
       height: 42px;
@@ -136,12 +176,6 @@
       border-radius: 50%;
       background: #fff;
       color: var(--ink);
-    }
-
-    .grid-button {
-      border-color: transparent;
-      border-radius: var(--radius);
-      color: var(--brand);
     }
 
     .menu-button { display: none; border-radius: var(--radius); }
@@ -366,7 +400,11 @@
       font-weight: 900;
     }
 
-    .section-head a {
+    .section-head a,
+    .section-head button {
+      padding: 4px 0;
+      border: 0;
+      background: transparent;
       color: var(--brand);
       font-size: 14px;
       font-weight: 900;
@@ -444,9 +482,14 @@
       color: var(--ink);
     }
 
-    .button.secondary:disabled {
-      color: var(--ink);
-      cursor: not-allowed;
+    .button.secondary:hover { border-color: var(--brand); color: var(--brand); }
+
+    .button:focus-visible,
+    .section-head button:focus-visible,
+    .app-row:focus-visible,
+    .dialog-close-icon:focus-visible {
+      outline: 3px solid rgba(7, 95, 240, .25);
+      outline-offset: 3px;
     }
 
     .app-icon {
@@ -473,6 +516,8 @@
     .icon-timer { background: linear-gradient(135deg, #6c3cf2, #9a6cff); }
     .icon-calendar { background: linear-gradient(135deg, #075ff0, #3f8fff); }
     .icon-idea { background: linear-gradient(135deg, #7447f4, #a16cff); }
+    .icon-task { background: linear-gradient(135deg, #ffad1f, #ff8a00); }
+    .icon-counter { background: linear-gradient(135deg, #0baac8, #1678e8); }
 
     .tags {
       display: flex;
@@ -525,16 +570,24 @@
     }
 
     .app-row {
+      width: 100%;
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto auto;
       align-items: center;
       gap: 16px;
       min-height: 82px;
       padding: 14px 26px;
+      border-right: 0;
+      border-bottom: 0;
+      border-left: 0;
       border-top: 1px solid var(--line);
+      background: transparent;
+      text-align: left;
+      transition: background-color .2s ease;
     }
 
     .app-row:first-child { border-top: 0; }
+    .app-row:hover { background: var(--soft); }
 
     .app-row strong {
       display: block;
@@ -622,6 +675,245 @@
       text-align: right;
     }
 
+    .search-summary {
+      margin: 14px 0 0;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--soft);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .app-dialog {
+      width: min(92vw, 520px);
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .app-dialog::backdrop { background: rgba(4, 17, 58, .48); }
+
+    .consent-dialog {
+      width: min(92vw, 580px);
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .consent-dialog::backdrop { background: rgba(4, 17, 58, .66); }
+
+    .consent-panel {
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .beta-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .consent-panel h2 {
+      margin: 16px 0 12px;
+      color: var(--ink);
+      font-size: clamp(23px, 4vw, 30px);
+      line-height: 1.35;
+    }
+
+    .consent-lead {
+      margin: 0;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.8;
+    }
+
+    .consent-points {
+      display: grid;
+      gap: 9px;
+      margin: 20px 0;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--soft);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .consent-points p {
+      display: flex;
+      gap: 9px;
+      margin: 0;
+    }
+
+    .consent-points p::before {
+      content: "!";
+      width: 20px;
+      height: 20px;
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--brand);
+      font-weight: 900;
+    }
+
+    .remember-consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 13px 14px;
+      border: 1px solid #b9d2ff;
+      border-radius: var(--radius);
+      background: #f4f8ff;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .remember-consent input {
+      width: 20px;
+      height: 20px;
+      margin: 1px 0 0;
+      flex: 0 0 auto;
+      accent-color: var(--brand);
+    }
+
+    .remember-consent small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .consent-actions {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .consent-actions .button { min-height: 48px; }
+
+    .dialog-panel {
+      position: relative;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .dialog-close-icon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .dialog-heading {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding-right: 42px;
+    }
+
+    .dialog-heading h2 {
+      margin: 0 0 5px;
+      color: var(--ink);
+      font-size: 24px;
+    }
+
+    .dialog-status {
+      display: inline-flex;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #dff9ef;
+      color: #078e66;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .dialog-status.waiting { background: var(--brand-soft); color: var(--brand); }
+
+    .dialog-description {
+      margin: 20px 0 16px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-weight: 700;
+    }
+
+    .dialog-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-bottom: 18px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .dialog-notice {
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: var(--soft);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .dialog-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      max-width: min(360px, calc(100vw - 36px));
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: #fff;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
     .hidden { display: none !important; }
 
     @media (max-width: 1180px) {
@@ -646,8 +938,8 @@
       .store-header { gap: 12px; }
       .brand img { width: 145px; }
       .header-actions { gap: 6px; }
-      .grid-button,
-      .icon-button:not(.grid-button) { display: none; }
+      .hub-home-button { padding: 0 11px; }
+      .hub-home-button .hub-name { display: none; }
       .hero {
         margin-top: 20px;
         padding: 24px 18px;
@@ -689,18 +981,33 @@
         grid-row: auto;
         text-align: left;
       }
+      .dialog-panel { padding: 22px 18px; }
+      .dialog-heading { grid-template-columns: 64px 1fr; gap: 12px; }
+      .dialog-heading .app-icon { width: 64px; height: 64px; }
+      .dialog-heading h2 { font-size: 20px; }
+      .consent-panel { padding: 24px 18px; }
+      .consent-actions { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 390px) {
+      .brand img { width: 126px; }
+      .hub-home-button {
+        gap: 6px;
+        padding: 0 9px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
-<body>
-  <div class="page">
+<body id="top" class="consent-required">
+  <div class="page" id="storePage">
     <header class="store-header">
-      <a class="brand" href="./" aria-label="IDS Store ホーム">
+      <a class="brand" href="#top" aria-label="IDS Store ホーム">
         <img src="../assets/ids-store-logo.png" alt="IDS Store">
       </a>
 
       <nav class="nav" aria-label="メインナビゲーション">
-        <a class="active" href="../index.html">ホーム</a>
+        <a class="active" href="#top">ホーム</a>
         <a href="#featured">アプリ一覧</a>
         <a href="#recommended">カテゴリ</a>
         <a href="#updates">お知らせ</a>
@@ -712,12 +1019,10 @@
       </label>
 
       <div class="header-actions">
-        <button class="icon-button grid-button" type="button" aria-label="メニュー一覧">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h.01"></path><path d="M12 4h.01"></path><path d="M20 4h.01"></path><path d="M4 12h.01"></path><path d="M12 12h.01"></path><path d="M20 12h.01"></path><path d="M4 20h.01"></path><path d="M12 20h.01"></path><path d="M20 20h.01"></path></svg>
-        </button>
-        <button class="icon-button" type="button" aria-label="ユーザー">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
+        <a class="hub-home-button" href="https://kali-n-coder.github.io/IDS-hub/" aria-label="IDS Hubのホームへ戻る">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path><path d="M9 12h10"></path></svg>
+          <span><span class="hub-name">IDS Hub </span>ホームへ戻る</span>
+        </a>
         <button class="menu-button" type="button" id="menuButton" aria-label="メニューを開く" aria-expanded="false">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
         </button>
@@ -725,11 +1030,13 @@
     </header>
 
     <nav class="mobile-panel" id="mobilePanel" aria-label="スマホナビゲーション">
-      <a href="../index.html">ホーム</a>
+      <a href="#top">ホーム</a>
       <a href="#featured">アプリ一覧</a>
       <a href="#recommended">カテゴリ</a>
       <a href="#updates">お知らせ</a>
     </nav>
+
+    <p class="search-summary hidden" id="searchSummary" role="status" aria-live="polite"></p>
 
     <main>
       <section class="hero">
@@ -772,11 +1079,11 @@
       <section class="section" id="featured">
         <div class="section-head">
           <h2>注目のアプリ</h2>
-          <a href="#featured">すべて見る →</a>
+          <button type="button" data-show-all="featured">すべて見る →</button>
         </div>
 
         <div class="app-grid" id="appGrid">
-          <article class="app-card" data-search="整理メモ 生産性 メモ シンプルで使いやすいメモアプリ">
+          <article class="app-card" data-app-id="organize-memo" data-search="整理メモ 生産性 メモ シンプルで使いやすいメモアプリ">
             <div class="app-icon icon-memo" aria-hidden="true">整</div>
             <div>
               <h3>整理メモ</h3>
@@ -785,12 +1092,12 @@
               <span class="rating"><span class="star">★</span> 4.7（236）</span>
             </div>
             <div class="card-actions">
-              <a class="button primary" href="#">アプリを開く</a>
-              <button class="button secondary" type="button" disabled>詳細</button>
+              <a class="button primary" href="../tools/memo.html">アプリを開く</a>
+              <button class="button secondary" type="button" data-app-details="organize-memo">詳細</button>
             </div>
           </article>
 
-          <article class="app-card" data-search="テスナビ 学習 計画 テスト計画を作りやすくする学習アプリ">
+          <article class="app-card" data-app-id="tesnavi" data-search="テスナビ 学習 計画 テスト計画を作りやすくする学習アプリ">
             <div class="app-icon icon-tesnavi" aria-hidden="true">テ</div>
             <div>
               <h3>テスナビ</h3>
@@ -799,12 +1106,12 @@
               <span class="rating"><span class="star">★</span> 4.6（189）</span>
             </div>
             <div class="card-actions">
-              <a class="button primary" href="#">アプリを開く</a>
-              <button class="button secondary" type="button" disabled>詳細</button>
+              <button class="button primary" type="button" data-app-open="tesnavi">公開状況を見る</button>
+              <button class="button secondary" type="button" data-app-details="tesnavi">詳細</button>
             </div>
           </article>
 
-          <article class="app-card" data-search="Study Timer 学習 生産性 集中時間を可視化して学習をサポートするタイマー">
+          <article class="app-card" data-app-id="study-timer" data-search="Study Timer 学習 生産性 集中時間を可視化して学習をサポートするタイマー">
             <div class="app-icon icon-timer" aria-hidden="true">ST</div>
             <div>
               <h3>Study Timer</h3>
@@ -813,8 +1120,8 @@
               <span class="rating"><span class="star">★</span> 4.5（312）</span>
             </div>
             <div class="card-actions">
-              <a class="button primary" href="#">アプリを開く</a>
-              <button class="button secondary" type="button" disabled>詳細</button>
+              <a class="button primary" href="../tools/pomodoro.html">アプリを開く</a>
+              <button class="button secondary" type="button" data-app-details="study-timer">詳細</button>
             </div>
           </article>
         </div>
@@ -823,38 +1130,38 @@
       <section class="section" id="recommended">
         <div class="section-head">
           <h2>おすすめのアプリ</h2>
-          <a href="#recommended">すべて見る →</a>
+          <button type="button" data-show-all="recommended">すべて見る →</button>
         </div>
 
         <div class="recommend-grid">
           <div class="list-panel">
-            <article class="app-row" data-search="スケジュールビュー カレンダー 計画">
+            <button class="app-row" type="button" data-app-details="schedule-view" data-search="スケジュールビュー カレンダー 計画">
               <div class="app-icon small icon-calendar" aria-hidden="true">予</div>
               <div><strong>スケジュールビュー</strong><span>見やすく整理できるカレンダーアプリ</span></div>
               <span class="rating"><span class="star">★</span> 4.3</span>
-              <span class="chevron">›</span>
-            </article>
-            <article class="app-row" data-search="アイデアノート メモ">
+              <span class="chevron" aria-hidden="true">›</span>
+            </button>
+            <button class="app-row" type="button" data-app-details="idea-note" data-search="アイデアノート メモ">
               <div class="app-icon small icon-idea" aria-hidden="true">案</div>
               <div><strong>アイデアノート</strong><span>ひらめきをすぐにメモして整理できるノートアプリ</span></div>
               <span class="rating"><span class="star">★</span> 4.1</span>
-              <span class="chevron">›</span>
-            </article>
+              <span class="chevron" aria-hidden="true">›</span>
+            </button>
           </div>
 
           <div class="list-panel">
-            <article class="app-row" data-search="スケジュールビュー カレンダー 計画">
-              <div class="app-icon small icon-calendar" aria-hidden="true">予</div>
-              <div><strong>スケジュールビュー</strong><span>見やすく整理できるカレンダーアプリ</span></div>
-              <span class="rating"><span class="star">★</span> 4.3</span>
-              <span class="chevron">›</span>
-            </article>
-            <article class="app-row" data-search="アイデアノート メモ">
-              <div class="app-icon small icon-idea" aria-hidden="true">案</div>
-              <div><strong>アイデアノート</strong><span>ひらめきをすぐにメモして整理できるノートアプリ</span></div>
-              <span class="rating"><span class="star">★</span> 4.1</span>
-              <span class="chevron">›</span>
-            </article>
+            <button class="app-row" type="button" data-app-details="task-deck" data-search="タスクデッキ 生産性 タスク">
+              <div class="app-icon small icon-task" aria-hidden="true">タ</div>
+              <div><strong>タスクデッキ</strong><span>カード形式でタスクを整理できる管理アプリ</span></div>
+              <span class="rating"><span class="star">★</span> 4.4</span>
+              <span class="chevron" aria-hidden="true">›</span>
+            </button>
+            <button class="app-row" type="button" data-app-details="char-counter" data-search="文字カウンター 文章 文字数">
+              <div class="app-icon small icon-counter" aria-hidden="true">文</div>
+              <div><strong>文字カウンター</strong><span>入力した文章の文字数をすばやく確認</span></div>
+              <span class="rating"><span class="star">★</span> 4.5</span>
+              <span class="chevron" aria-hidden="true">›</span>
+            </button>
           </div>
         </div>
       </section>
@@ -862,7 +1169,7 @@
       <section class="section" id="updates">
         <div class="section-head">
           <h2>最近の更新</h2>
-          <a href="#updates">すべて見る →</a>
+          <button type="button" data-show-all="updates">すべて見る →</button>
         </div>
 
         <div class="updates">
@@ -895,35 +1202,309 @@
     </main>
   </div>
 
+  <dialog class="consent-dialog" id="consentDialog" aria-labelledby="consentTitle" aria-describedby="consentDescription">
+    <div class="consent-panel">
+      <span class="beta-label">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.7a2 2 0 0 0-3.4 0Z"></path></svg>
+        試験導入
+      </span>
+      <h2 id="consentTitle">IDS Storeをご利用になる前に</h2>
+      <p class="consent-lead" id="consentDescription">IDS Storeは現在、試験導入として公開しています。バグや予期しない動作が含まれる可能性があります。内容をご確認のうえ、同意してご利用ください。</p>
+      <div class="consent-points">
+        <p>表示や機能が正しく動作しない場合があります。</p>
+        <p>掲載内容や機能は、予告なく変更される場合があります。</p>
+      </div>
+      <label class="remember-consent" for="rememberConsent">
+        <input id="rememberConsent" type="checkbox">
+        <span>
+          次回からこの確認を表示しない
+          <small>チェックして同意すると、この端末では次回から表示されません。</small>
+        </span>
+      </label>
+      <div class="consent-actions">
+        <button class="button primary" type="button" id="acceptConsent">内容に同意して利用する</button>
+        <a class="button secondary" href="https://kali-n-coder.github.io/IDS-hub/">同意せずホームへ戻る</a>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="app-dialog" id="appDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-panel">
+      <button class="dialog-close-icon" type="button" data-dialog-close aria-label="詳細を閉じる">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg>
+      </button>
+      <div class="dialog-heading">
+        <div class="app-icon" id="dialogIcon" aria-hidden="true"></div>
+        <div>
+          <h2 id="dialogTitle"></h2>
+          <span class="dialog-status" id="dialogStatus"></span>
+        </div>
+      </div>
+      <p class="dialog-description" id="dialogDescription"></p>
+      <div class="tags" id="dialogCategories"></div>
+      <div class="dialog-meta">
+        <span id="dialogRating"></span>
+        <span id="dialogAvailability"></span>
+      </div>
+      <p class="dialog-notice hidden" id="dialogNotice">このアプリは現在公開準備中です。公開までしばらくお待ちください。</p>
+      <div class="dialog-actions">
+        <a class="button primary" id="dialogOpenButton" href="#">アプリを開く</a>
+        <button class="button secondary" type="button" data-dialog-close>閉じる</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
   <script>
+    const STORE_CONSENT_KEY = "ids-store-trial-consent-v1";
+    const storePage = document.querySelector("#storePage");
+    const consentDialog = document.querySelector("#consentDialog");
+    const rememberConsent = document.querySelector("#rememberConsent");
+    const acceptConsent = document.querySelector("#acceptConsent");
+
+    const hasSavedConsent = () => {
+      try {
+        return window.localStorage.getItem(STORE_CONSENT_KEY) === "accepted";
+      } catch (error) {
+        return false;
+      }
+    };
+
+    const enableStore = () => {
+      document.body.classList.remove("consent-required");
+      if (consentDialog.open) consentDialog.close();
+    };
+
+    const showConsentDialog = () => {
+      if (consentDialog.open) return;
+
+      try {
+        if (typeof consentDialog.showModal === "function") {
+          consentDialog.showModal();
+        } else {
+          consentDialog.setAttribute("open", "");
+        }
+      } catch (error) {
+        consentDialog.setAttribute("open", "");
+      }
+    };
+
+    const initializeConsentGate = () => {
+      if (hasSavedConsent()) {
+        enableStore();
+        return;
+      }
+
+      document.body.classList.add("consent-required");
+      showConsentDialog();
+    };
+
+    acceptConsent.addEventListener("click", () => {
+      if (rememberConsent.checked) {
+        try {
+          window.localStorage.setItem(STORE_CONSENT_KEY, "accepted");
+        } catch (error) {
+          // Storage can be unavailable in private browsing; consent still applies to this view.
+        }
+      }
+      enableStore();
+    });
+
+    consentDialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    });
+
+    consentDialog.addEventListener("close", () => {
+      if (document.body.classList.contains("consent-required")) {
+        window.setTimeout(showConsentDialog, 0);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && document.body.classList.contains("consent-required")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showConsentDialog();
+      }
+    }, true);
+
+    const appData = {
+      "organize-memo": {
+        name: "整理メモ",
+        description: "シンプルで使いやすく、情報をすっきり整理できるメモアプリです。",
+        categories: ["生産性", "メモ"], rating: "4.7", status: "公開中",
+        iconClass: "icon-memo", iconText: "整", url: "../tools/memo.html"
+      },
+      tesnavi: {
+        name: "テスナビ",
+        description: "テスト計画を作りやすくし、学習の進み具合を整理できるアプリです。",
+        categories: ["学習", "計画"], rating: "4.6", status: "公開準備中",
+        iconClass: "icon-tesnavi", iconText: "テ", url: ""
+      },
+      "study-timer": {
+        name: "Study Timer",
+        description: "集中時間を可視化して、メリハリのある学習をサポートするタイマーです。",
+        categories: ["学習", "生産性"], rating: "4.5", status: "公開中",
+        iconClass: "icon-timer", iconText: "ST", url: "../tools/pomodoro.html"
+      },
+      "schedule-view": {
+        name: "スケジュールビュー",
+        description: "予定を見やすく整理できるカレンダーアプリです。",
+        categories: ["計画", "カレンダー"], rating: "4.3", status: "公開準備中",
+        iconClass: "icon-calendar", iconText: "予", url: ""
+      },
+      "idea-note": {
+        name: "アイデアノート",
+        description: "ひらめきをすぐにメモして、あとから見つけやすく整理できるアプリです。",
+        categories: ["メモ", "アイデア"], rating: "4.1", status: "公開準備中",
+        iconClass: "icon-idea", iconText: "案", url: ""
+      },
+      "task-deck": {
+        name: "タスクデッキ",
+        description: "カード形式でタスクを整理し、進み具合を管理できるアプリです。",
+        categories: ["生産性", "タスク"], rating: "4.4", status: "公開準備中",
+        iconClass: "icon-task", iconText: "タ", url: ""
+      },
+      "char-counter": {
+        name: "文字カウンター",
+        description: "入力した文章の文字数をすばやく確認できる文章作成ツールです。",
+        categories: ["文章", "ツール"], rating: "4.5", status: "公開中",
+        iconClass: "icon-counter", iconText: "文", url: "../tools/char-counter.html"
+      }
+    };
+
     const menuButton = document.querySelector("#menuButton");
     const mobilePanel = document.querySelector("#mobilePanel");
     const searchInput = document.querySelector("#storeSearch");
+    const searchSummary = document.querySelector("#searchSummary");
+    const appDialog = document.querySelector("#appDialog");
+    const dialogIcon = document.querySelector("#dialogIcon");
+    const dialogTitle = document.querySelector("#dialogTitle");
+    const dialogStatus = document.querySelector("#dialogStatus");
+    const dialogDescription = document.querySelector("#dialogDescription");
+    const dialogCategories = document.querySelector("#dialogCategories");
+    const dialogRating = document.querySelector("#dialogRating");
+    const dialogAvailability = document.querySelector("#dialogAvailability");
+    const dialogNotice = document.querySelector("#dialogNotice");
+    const dialogOpenButton = document.querySelector("#dialogOpenButton");
+    const toast = document.querySelector("#toast");
     const searchableItems = [
       ...document.querySelectorAll(".app-card"),
       ...document.querySelectorAll(".app-row"),
       ...document.querySelectorAll(".update-row")
     ];
+    let toastTimer;
+
+    const setMenuOpen = (isOpen) => {
+      mobilePanel.classList.toggle("open", isOpen);
+      menuButton.setAttribute("aria-expanded", String(isOpen));
+      menuButton.setAttribute("aria-label", isOpen ? "メニューを閉じる" : "メニューを開く");
+    };
+
+    const showToast = (message) => {
+      window.clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.remove("hidden");
+      toastTimer = window.setTimeout(() => toast.classList.add("hidden"), 2400);
+    };
+
+    const updateSearch = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      searchableItems.forEach((item) => {
+        const text = (item.dataset.search || item.textContent).toLowerCase();
+        const isVisible = !query || text.includes(query);
+        item.classList.toggle("hidden", !isVisible);
+        if (isVisible) visibleCount += 1;
+      });
+
+      searchSummary.classList.toggle("hidden", !query);
+      if (query) {
+        searchSummary.textContent = visibleCount
+          ? `「${searchInput.value.trim()}」の検索結果：${visibleCount}件`
+          : `「${searchInput.value.trim()}」に一致するアプリや更新情報はありません。`;
+      }
+    };
+
+    const openAppDialog = (appId) => {
+      const data = appData[appId];
+      if (!data) return;
+
+      dialogIcon.className = `app-icon ${data.iconClass}`;
+      dialogIcon.textContent = data.iconText;
+      dialogTitle.textContent = data.name;
+      dialogStatus.textContent = data.status;
+      dialogStatus.classList.toggle("waiting", !data.url);
+      dialogDescription.textContent = data.description;
+      dialogCategories.replaceChildren(...data.categories.map((category) => {
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = category;
+        return tag;
+      }));
+      dialogRating.textContent = `評価 ★ ${data.rating}`;
+      dialogAvailability.textContent = data.url ? "利用可能" : "公開準備中";
+      dialogNotice.classList.toggle("hidden", Boolean(data.url));
+      dialogOpenButton.classList.toggle("hidden", !data.url);
+      if (data.url) dialogOpenButton.href = data.url;
+      appDialog.showModal();
+    };
 
     menuButton.addEventListener("click", () => {
-      const isOpen = mobilePanel.classList.toggle("open");
-      menuButton.setAttribute("aria-expanded", String(isOpen));
+      setMenuOpen(menuButton.getAttribute("aria-expanded") !== "true");
     });
 
     mobilePanel.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        mobilePanel.classList.remove("open");
-        menuButton.setAttribute("aria-expanded", "false");
+      link.addEventListener("click", () => setMenuOpen(false));
+    });
+
+    searchInput.addEventListener("input", updateSearch);
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && searchInput.value) {
+        searchInput.value = "";
+        updateSearch();
+        showToast("検索をクリアしました");
+      }
+    });
+
+    document.querySelectorAll("[data-show-all]").forEach((button) => {
+      button.addEventListener("click", () => {
+        searchInput.value = "";
+        updateSearch();
+        document.querySelector(`#${button.dataset.showAll}`).scrollIntoView({ behavior: "smooth" });
+        showToast("すべての項目を表示しました");
       });
     });
 
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.trim().toLowerCase();
-      searchableItems.forEach((item) => {
-        const text = (item.dataset.search || item.textContent).toLowerCase();
-        item.classList.toggle("hidden", query && !text.includes(query));
+    document.querySelectorAll("[data-app-details], [data-app-open]").forEach((button) => {
+      button.addEventListener("click", () => {
+        openAppDialog(button.dataset.appDetails || button.dataset.appOpen);
       });
     });
+
+    document.querySelectorAll("[data-dialog-close]").forEach((button) => {
+      button.addEventListener("click", () => appDialog.close());
+    });
+
+    appDialog.addEventListener("click", (event) => {
+      if (event.target === appDialog) appDialog.close();
+    });
+
+    document.addEventListener("click", (event) => {
+      if (menuButton.getAttribute("aria-expanded") === "true" &&
+          !mobilePanel.contains(event.target) && !menuButton.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    });
+
+    window.addEventListener("pageshow", () => {
+      if (hasSavedConsent()) enableStore();
+    });
+
+    initializeConsentGate();
   </script>
 </body>
 </html>
