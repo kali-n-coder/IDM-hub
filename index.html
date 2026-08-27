@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IDS Hub</title>
+  <title>IDS Apps</title>
   <style>
     :root {
       color-scheme: light;
@@ -18,7 +18,8 @@
       --yellow: #d98900;
       --red: #d64562;
       --dark: #172232;
-      --shadow: 0 20px 55px rgba(24, 39, 58, .14);
+      --soft: #eef5ff;
+      --shadow: 0 18px 42px rgba(24, 39, 58, .10);
       --radius: 12px;
       --radius-sm: 8px;
       font-family: "Inter", "Noto Sans JP", "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
@@ -36,6 +37,7 @@
       --yellow: #d29922;
       --red: #f85149;
       --dark: #0d1117;
+      --soft: #101923;
       --shadow: 0 16px 48px rgba(0, 0, 0, .4);
     }
 
@@ -44,10 +46,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background:
-        radial-gradient(circle at 18% 8%, rgba(9, 105, 218, .08), transparent 28%),
-        radial-gradient(circle at 88% 22%, rgba(0, 135, 111, .07), transparent 30%),
-        var(--bg);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--soft) 72%, var(--panel)) 0, var(--bg) 360px);
       color: var(--ink);
       transition: background .3s, color .3s;
     }
@@ -64,9 +63,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding: 12px clamp(16px, 4vw, 42px);
+      padding: 12px max(16px, calc((100vw - 1180px) / 2 + 24px));
       border-bottom: 1px solid var(--line);
-      background: color-mix(in srgb, var(--panel) 85%, transparent);
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
@@ -274,50 +273,57 @@
     main {
       width: min(1180px, 100%);
       margin: 0 auto;
-      padding: 28px clamp(14px, 4vw, 42px) 48px;
+      padding: 28px 24px 54px;
     }
 
     .hero {
-      padding: clamp(40px, 6vw, 72px) clamp(24px, 4vw, 48px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(310px, .95fr);
+      align-items: center;
+      gap: clamp(22px, 4vw, 46px);
+      padding: clamp(34px, 5vw, 64px);
       border-radius: var(--radius);
       background:
-        linear-gradient(135deg, rgba(9, 105, 218, .28), rgba(0, 135, 111, .12)),
-        var(--dark);
+        linear-gradient(135deg, color-mix(in srgb, var(--brand) 13%, var(--panel)), color-mix(in srgb, var(--green) 8%, var(--panel)));
+      border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line));
       box-shadow: var(--shadow);
-      color: #fff;
-      text-align: center;
+      color: var(--ink);
+      overflow: hidden;
+      position: relative;
     }
 
     .hero .eyebrow {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
       margin: 0 0 14px;
-      padding: 6px 14px;
+      padding: 0 13px;
       border-radius: 999px;
-      background: rgba(255,255,255,.12);
-      color: #89e3d3;
+      background: color-mix(in srgb, var(--brand) 12%, var(--panel));
+      color: var(--brand-dark);
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: .04em;
+      letter-spacing: 0;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(28px, 5vw, 48px);
-      line-height: 1.2;
-      letter-spacing: -.02em;
+      max-width: 620px;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
     }
 
     .hero-desc {
-      margin: 16px auto 0;
-      max-width: 580px;
-      color: #d7e2ef;
-      font-size: clamp(14px, 1.6vw, 16px);
-      line-height: 1.8;
+      margin: 18px 0 0;
+      max-width: 610px;
+      color: var(--muted);
+      font-size: clamp(15px, 1.8vw, 17px);
+      line-height: 1.9;
     }
 
     .hero-stats {
       display: flex;
-      justify-content: center;
       gap: 24px;
       margin-top: 28px;
       flex-wrap: wrap;
@@ -326,50 +332,186 @@
     .hero-stat {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       gap: 4px;
+      min-width: 88px;
     }
 
     .hero-stat strong { font-size: 22px; }
-    .hero-stat span { font-size: 11px; color: #b0c8e4; font-weight: 700; }
+    .hero-stat span { font-size: 11px; color: var(--muted); font-weight: 700; }
 
     .hero-actions {
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 28px;
     }
 
     .hero .primary-button {
-      background: #fff;
-      color: var(--dark);
-      box-shadow: 0 6px 18px rgba(0,0,0,.2);
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(9, 105, 218, .22);
     }
 
     .hero .ghost-button {
-      border-color: rgba(255,255,255,.3);
-      background: rgba(255,255,255,.08);
-      color: #fff;
+      border-color: color-mix(in srgb, var(--brand) 22%, var(--line));
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+      color: var(--ink);
     }
 
     .hero .ghost-button:hover {
-      border-color: rgba(255,255,255,.6);
-      color: #fff;
+      border-color: var(--brand);
+      color: var(--brand);
     }
 
-    .section { margin-top: 36px; }
+    .hero-preview {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--panel) 90%, transparent);
+      box-shadow: 0 16px 34px rgba(24, 39, 58, .10);
+    }
+
+    .featured-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .hero-preview .card {
+      padding: 10px;
+      gap: 6px;
+    }
+
+    .hero-preview .card-art {
+      height: 64px;
+    }
+
+    .hero-preview .card h3 {
+      font-size: 14px;
+    }
+
+    .hero-preview .card p {
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .hero-preview .card .primary-button {
+      min-height: 32px;
+      font-size: 12px;
+    }
+
+    .hero-preview .featured-card {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      grid-template-areas:
+        "art top action"
+        "art title action"
+        "art desc action";
+      align-items: center;
+      column-gap: 10px;
+      row-gap: 3px;
+    }
+
+    .hero-preview .featured-card .card-top { grid-area: top; min-width: 0; }
+
+    .hero-preview .featured-card .card-art {
+      grid-area: art;
+      width: 64px;
+      height: 64px;
+    }
+
+    .hero-preview .featured-card h3 {
+      grid-area: title;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .hero-preview .featured-card p {
+      grid-area: desc;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .hero-preview .featured-card .primary-button {
+      grid-area: action;
+      min-height: 30px;
+      padding: 0 10px;
+    }
+
+    .hero-preview .featured-card.locked::after {
+      display: none;
+    }
+
+    .preview-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .preview-head strong { font-size: 14px; }
+    .preview-head span { color: var(--muted); font-size: 12px; font-weight: 700; }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .quick-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 76px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(24, 39, 58, .04);
+      transition: transform .15s ease, border-color .15s, box-shadow .15s;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--brand) 35%, var(--line));
+      box-shadow: 0 14px 26px rgba(24, 39, 58, .08);
+    }
+
+    .quick-link strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    .quick-link span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .section { margin-top: 40px; }
 
     .section-head {
       display: flex;
       justify-content: space-between;
       align-items: end;
       gap: 16px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
     }
 
-    .section-head h2 { margin: 0; font-size: 22px; letter-spacing: -.01em; }
+    .section-head h2 { margin: 0; font-size: 24px; letter-spacing: 0; }
     .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
 
     .search-wrap {
@@ -387,10 +529,10 @@
 
     .search-wrap input {
       width: 100%;
-      min-height: 40px;
+      min-height: 44px;
       padding: 0 12px 0 38px;
       border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
+      border-radius: 999px;
       outline: 0;
       background: var(--panel);
       color: var(--ink);
@@ -406,13 +548,13 @@
     .filters {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
+      gap: 8px;
+      margin-bottom: 16px;
     }
 
     .chip {
-      min-height: 32px;
-      padding: 0 12px;
+      min-height: 34px;
+      padding: 0 14px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: var(--panel);
@@ -435,11 +577,11 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      margin-bottom: 14px;
-      padding: 12px 14px;
-      border: 1px solid color-mix(in srgb, var(--yellow) 40%, transparent);
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--line));
       border-radius: var(--radius-sm);
-      background: color-mix(in srgb, var(--yellow) 8%, var(--panel));
+      background: color-mix(in srgb, var(--brand) 7%, var(--panel));
       color: var(--ink);
       font-size: 13px;
       line-height: 1.6;
@@ -447,20 +589,21 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(244px, 1fr));
       gap: 14px;
     }
 
     .card {
-      padding: 18px;
+      padding: 16px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--panel);
-      box-shadow: 0 4px 12px rgba(24, 39, 58, .04);
+      box-shadow: 0 6px 18px rgba(24, 39, 58, .05);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
+      overflow: hidden;
     }
 
     .card:hover {
@@ -471,15 +614,25 @@
 
     .card-top {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       gap: 10px;
     }
 
-    .tool-icon {
-      width: 38px;
-      height: 38px;
+    .card-art {
+      width: 100%;
+      height: 104px;
+      display: block;
+      object-fit: cover;
+      border: 1px solid var(--line);
       border-radius: var(--radius-sm);
+      background: var(--soft);
+    }
+
+    .tool-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
       color: #fff;
@@ -505,9 +658,9 @@
       white-space: nowrap;
     }
 
-    .card h3 { margin: 0; font-size: 16px; }
-    .card p { margin: 0; flex: 1; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .card .primary-button, .card .ghost-button { justify-content: center; font-size: 13px; }
+    .card h3 { margin: 0; font-size: 15px; }
+    .card p { margin: 0; flex: 1; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .card .primary-button, .card .ghost-button { min-height: 34px; justify-content: center; font-size: 12px; }
 
     .card.locked { position: relative; }
 
@@ -533,7 +686,7 @@
     }
 
     .panel {
-      padding: 18px;
+      padding: 22px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--panel);
@@ -712,14 +865,18 @@
     @media (max-width: 900px) {
       .nav-link { display: none; }
       .hamburger { display: grid; }
+      .hero { grid-template-columns: 1fr; }
+      .quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .two-col { grid-template-columns: 1fr; }
       .workflow { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 620px) {
       .topbar { padding: 10px 14px; }
-      .hero { padding: 28px 18px; }
-      h1 { font-size: 26px; }
+      main { padding: 22px 14px 44px; }
+      .hero { padding: 26px 18px; }
+      h1 { font-size: 32px; }
+      .quick-links { grid-template-columns: 1fr; }
       .section-head { flex-direction: column; align-items: stretch; }
       .search-wrap { width: 100%; }
       .grid { grid-template-columns: 1fr; }
@@ -732,7 +889,7 @@
   <header class="topbar">
     <a class="brand" href="#">
       <img class="brand-mark" src="assets/ids-logo.png" alt="IDS">
-      <span>IDS Hub<br>Tools &amp; Games</span>
+      <span>IDS Apps<br>Tools &amp; Games</span>
     </a>
     <nav class="nav" aria-label="メインナビゲーション">
       <a class="nav-link" href="#tools">ツール</a>
@@ -774,24 +931,53 @@
 
   <main>
     <section class="hero">
-      <span class="eyebrow">Public Beta</span>
-      <h1>便利ツールとミニゲームを、<br>ひとつのHubに。</h1>
-      <p class="hero-desc">IDS Hubは、作業に役立つWebツールと短時間で遊べるゲームをまとめたポータルです。無料アカウントを作って、すぐに利用を始められます。</p>
-      <div class="hero-stats">
-        <div class="hero-stat"><strong id="heroToolCount">6</strong><span>コンテンツ</span></div>
-        <div class="hero-stat"><strong>24h</strong><span>いつでも利用可</span></div>
-        <div class="hero-stat"><strong>Free</strong><span>無料アカウント</span></div>
+      <div>
+        <span class="eyebrow">IDS Apps</span>
+        <h1>必要なツールとゲームを、すぐ見つける。</h1>
+        <p class="hero-desc">IDS Appsは、作業に役立つツールと短時間で楽しめるゲームをまとめたホームです。検索、カテゴリ、カード一覧から、今使いたいものへすばやく移動できます。</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong id="heroToolCount">6</strong><span>コンテンツ</span></div>
+          <div class="hero-stat"><strong>Search</strong><span>名前で探せる</span></div>
+          <div class="hero-stat"><strong>Free</strong><span>無料アカウント</span></div>
+        </div>
+        <div class="hero-actions">
+          <a class="primary-button" href="#tools">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+            コンテンツを見る
+          </a>
+          <button class="ghost-button" type="button" data-auth-open="signup">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M19 8v6"></path><path d="M22 11h-6"></path></svg>
+            無料登録
+          </button>
+        </div>
       </div>
-      <div class="hero-actions">
-        <button class="primary-button" type="button" data-auth-open="signup">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-          はじめる
-        </button>
-        <a class="ghost-button" href="#tools">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
-          ラインナップを見る
-        </a>
-      </div>
+
+      <aside class="hero-preview" aria-label="おすすめコンテンツ">
+        <div class="preview-head">
+          <strong>今日のおすすめ</strong>
+          <span id="featuredModeLabel">毎日更新</span>
+        </div>
+        <div class="featured-list" id="featuredList"></div>
+      </aside>
+    </section>
+
+    <section class="quick-links" aria-label="IDS Appsショートカット">
+      <a class="quick-link" href="#tools">
+        <div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg></div>
+        <div><strong>一覧から探す</strong><span>すべてのコンテンツを見る</span></div>
+      </a>
+      <a class="quick-link" href="#tools">
+        <div class="tool-icon green"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path></svg></div>
+        <div><strong>ツールを使う</strong><span>作業に役立つ機能へ</span></div>
+      </a>
+      <a class="quick-link" href="#tools">
+        <div class="tool-icon yellow"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16v10H4z"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></div>
+        <div><strong>ゲームで遊ぶ</strong><span>短時間で気分転換</span></div>
+      </a>
+      <a class="quick-link" href="#news">
+        <div class="tool-icon dark"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 0 1 2-2h11v18H6a2 2 0 0 1-2-1.5Z"></path><path d="M8 7h5"></path><path d="M8 11h5"></path></svg></div>
+        <div><strong>お知らせ</strong><span>更新情報を確認</span></div>
+      </a>
     </section>
 
     <section class="section" id="tools">
@@ -822,9 +1008,9 @@
       <div class="grid" id="toolGrid">
         <article class="card locked" data-category="tool dev" data-keywords="json formatter validate api">
           <div class="card-top">
-            <div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><path d="m10 9-3 3 3 3"></path><path d="m14 9 3 3-3 3"></path><path d="M5 4h14v16H5z"></path></svg></div>
             <span class="badge">開発ツール</span>
           </div>
+          <img class="card-art" src="assets/apps/json-formatter.png" alt="JSON Formatterのロゴ">
           <h3>JSON Formatter</h3>
           <p>JSONの整形、圧縮、簡易バリデーションを行うツールです。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
@@ -832,9 +1018,9 @@
 
         <article class="card locked" data-category="tool utility" data-keywords="qr code url share">
           <div class="card-top">
-            <div class="tool-icon green"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3h7v7H3z"></path><path d="M14 3h7v7h-7z"></path><path d="M3 14h7v7H3z"></path><path d="M14 14h2v2h-2zM19 14h2v2h-2zM14 19h2v2h-2zM19 19h2v2h-2z"></path></svg></div>
             <span class="badge">日常ツール</span>
           </div>
+          <img class="card-art" src="assets/apps/qr-code-maker.png" alt="QR Code Makerのロゴ">
           <h3>QR Code Maker</h3>
           <p>URLやテキストをQRコード化して、スマホ共有を簡単にします。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
@@ -842,19 +1028,19 @@
 
         <article class="card locked" data-category="tool dev" data-keywords="base64 encode decode text">
           <div class="card-top">
-            <div class="tool-icon dark"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg></div>
             <span class="badge">開発ツール</span>
           </div>
+          <img class="card-art" src="assets/apps/base64-converter.png" alt="Base64 Converterのロゴ">
           <h3>Base64 Converter</h3>
-          <p>文字列のBase64エンコード、デコードをブラウザで確認できます。</p>
+          <p>文字列のBase64エンコード、デコードをすばやく確認できます。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
         </article>
 
         <article class="card locked" data-category="game" data-keywords="typing game speed">
           <div class="card-top">
-            <div class="tool-icon yellow"><svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16v10H4z"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></div>
             <span class="badge">ゲーム</span>
           </div>
+          <img class="card-art" src="assets/apps/typing-sprint.png" alt="Typing Sprintのロゴ">
           <h3>Typing Sprint</h3>
           <p>短時間で遊べるタイピングゲーム。集中力のウォームアップに使えます。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
@@ -862,9 +1048,9 @@
 
         <article class="card locked" data-category="game" data-keywords="puzzle logic block">
           <div class="card-top">
-            <div class="tool-icon red"><svg class="icon" viewBox="0 0 24 24"><path d="M8 3h8v6H8z"></path><path d="M3 15h6v6H3z"></path><path d="M15 15h6v6h-6z"></path><path d="M12 9v3"></path><path d="M6 15v-3h12v3"></path></svg></div>
             <span class="badge">ゲーム</span>
           </div>
+          <img class="card-art" src="assets/apps/logic-blocks.png" alt="Logic Blocksのロゴ">
           <h3>Logic Blocks</h3>
           <p>手軽に遊べるロジックパズル。休憩時間に頭を切り替えられます。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
@@ -872,9 +1058,9 @@
 
         <article class="card locked" data-category="tool utility" data-keywords="memo note template">
           <div class="card-top">
-            <div class="tool-icon green"><svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h5"></path></svg></div>
             <span class="badge">日常ツール</span>
           </div>
+          <img class="card-art" src="assets/apps/quick-memo.png" alt="Quick Memoのロゴ">
           <h3>Quick Memo</h3>
           <p>思いついた内容をすぐ残せるメモツールです。作業中の小さな記録に使えます。</p>
           <button class="primary-button" type="button" data-requires-login>開く</button>
@@ -887,8 +1073,8 @@
       <div class="panel">
         <div class="section-head">
           <div>
-            <h2>IDS Hubでできること</h2>
-            <p>よく使うWebツールと息抜きのゲームを、迷わず開ける場所にまとめています。</p>
+            <h2>IDS Appsでできること</h2>
+            <p>よく使うツールと息抜きのゲームを、迷わず開ける場所にまとめています。</p>
           </div>
         </div>
         <ul class="feature-list">
@@ -910,7 +1096,7 @@
         <div id="announcementsList">
           <div class="notice-item">
             <time datetime="2026-05-16">2026.05.16</time>
-            <p><strong>IDS Hubを公開しました。</strong><br>ツールとゲームは順次追加していきます。</p>
+            <p><strong>IDS Appsを公開しました。</strong><br>ツールとゲームは順次追加していきます。</p>
           </div>
           <div class="notice-item">
             <time datetime="2026-05-16">2026.05.16</time>
@@ -922,7 +1108,7 @@
   </main>
 
   <footer>
-    <p>IDS Hub &mdash; 便利ツールとミニゲームのポータル<br><a href="admin.html">管理画面</a></p>
+    <p>IDS Apps &mdash; 便利ツールとミニゲームのポータル<br><a href="admin.html">管理画面</a></p>
   </footer>
 
   <button class="back-to-top" id="backToTop" aria-label="ページ上部に戻る">
@@ -994,6 +1180,8 @@
     const searchInput = document.querySelector("#searchInput");
     const emptyState = document.querySelector("#emptyState");
     const heroToolCount = document.querySelector("#heroToolCount");
+    const featuredList = document.querySelector("#featuredList");
+    const featuredModeLabel = document.querySelector("#featuredModeLabel");
     const announcementsList = document.querySelector("#announcementsList");
     const modal = document.querySelector("#authModal");
     const authTitle = document.querySelector("#authTitle");
@@ -1016,29 +1204,65 @@
     let currentFilter = "all";
     let authMode = "login";
     let currentUser = null;
+    let homeSettings = { featuredMode: "daily", featuredToolIds: [] };
 
     let toolUrls = {};
     let toolRegistry = {};
+    const appImagesById = {
+      "character-counter": "assets/apps/character-counter.png",
+      "omikuji": "assets/apps/omikuji.png",
+      "pomodoro-timer": "assets/apps/pomodoro-timer.png",
+      "qr-code-generator": "assets/apps/qr-code-generator.png",
+      "quiz-live": "assets/apps/quiz-live.png",
+      "sudoku": "assets/apps/sudoku.png",
+      "temporary-notes": "assets/apps/temporary-notes.png",
+      "tool-1778903921054": "assets/apps/investment-game.png",
+      "tool-1778922367042": "assets/apps/casino.png",
+      "tool-1779067598735": "assets/apps/roulette.png",
+      "tool-1781837966121": "assets/apps/tesnavi.png",
+      "typing-game": "assets/apps/typing-game.png"
+    };
+    const appImages = {
+      "JSON Formatter": "assets/apps/json-formatter.png",
+      "QR Code Maker": "assets/apps/qr-code-maker.png",
+      "Base64 Converter": "assets/apps/base64-converter.png",
+      "Typing Sprint": "assets/apps/typing-sprint.png",
+      "Logic Blocks": "assets/apps/logic-blocks.png",
+      "Quick Memo": "assets/apps/quick-memo.png",
+      "文字数カウンター": "assets/apps/character-counter.png",
+      "おみくじ": "assets/apps/omikuji.png",
+      "ポモドーロ・ストップウォッチ": "assets/apps/pomodoro-timer.png",
+      "QRコード生成ツール": "assets/apps/qr-code-generator.png",
+      "IDS Quiz Live": "assets/apps/quiz-live.png",
+      "数独": "assets/apps/sudoku.png",
+      "メモ帳・一時保存ツール": "assets/apps/temporary-notes.png",
+      "投資ゲーム": "assets/apps/investment-game.png",
+      "カジノ": "assets/apps/casino.png",
+      "ルーレット": "assets/apps/roulette.png",
+      "テスナビ": "assets/apps/tesnavi.png",
+      "タイピングゲーム": "assets/apps/typing-game.png"
+    };
+    const appImagePool = Object.values(appImagesById);
     const fallbackTools = [
-      { name: "JSON Formatter", description: "JSONの整形、圧縮、簡易バリデーションを行うツールです。", category: "tool dev", label: "開発ツール", url: "https://jsonformatter.org/", color: "blue", keywords: "json formatter validate api" },
-      { name: "QR Code Maker", description: "URLやテキストをQRコード化して、スマホ共有を簡単にします。", category: "tool utility", label: "日常ツール", url: "https://www.qr-code-generator.com/", color: "green", keywords: "qr code url share" },
-      { name: "Base64 Converter", description: "文字列のBase64エンコード、デコードをブラウザで確認できます。", category: "tool dev", label: "開発ツール", url: "https://www.base64decode.org/", color: "dark", keywords: "base64 encode decode text" },
-      { name: "Typing Sprint", description: "短時間で遊べるタイピングゲーム。集中力のウォームアップに使えます。", category: "game", label: "ゲーム", url: "https://monkeytype.com/", color: "yellow", keywords: "typing game speed" },
-      { name: "Logic Blocks", description: "手軽に遊べるロジックパズル。休憩時間に頭を切り替えられます。", category: "game", label: "ゲーム", url: "https://www.puzzle-nurikabe.com/", color: "red", keywords: "puzzle logic block" },
-      { name: "Quick Memo", description: "思いついた内容をすぐ残せるメモツールです。作業中の小さな記録に使えます。", category: "tool utility", label: "日常ツール", url: "https://keep.google.com/", color: "green", keywords: "memo note template" }
+      { name: "JSON Formatter", description: "JSONの整形、圧縮、簡易バリデーションを行うツールです。", category: "tool dev", label: "開発ツール", url: "https://jsonformatter.org/", color: "blue", keywords: "json formatter validate api", image: appImages["JSON Formatter"] },
+      { name: "QR Code Maker", description: "URLやテキストをQRコード化して、スマホ共有を簡単にします。", category: "tool utility", label: "日常ツール", url: "https://www.qr-code-generator.com/", color: "green", keywords: "qr code url share", image: appImages["QR Code Maker"] },
+      { name: "Base64 Converter", description: "文字列のBase64エンコード、デコードを確認できます。", category: "tool dev", label: "開発ツール", url: "https://www.base64decode.org/", color: "dark", keywords: "base64 encode decode text", image: appImages["Base64 Converter"] },
+      { name: "Typing Sprint", description: "短時間で遊べるタイピングゲーム。集中力のウォームアップに使えます。", category: "game", label: "ゲーム", url: "https://monkeytype.com/", color: "yellow", keywords: "typing game speed", image: appImages["Typing Sprint"] },
+      { name: "Logic Blocks", description: "手軽に遊べるロジックパズル。休憩時間に頭を切り替えられます。", category: "game", label: "ゲーム", url: "https://www.puzzle-nurikabe.com/", color: "red", keywords: "puzzle logic block", image: appImages["Logic Blocks"] },
+      { name: "Quick Memo", description: "思いついた内容をすぐ残せるメモツールです。作業中の小さな記録に使えます。", category: "tool utility", label: "日常ツール", url: "https://keep.google.com/", color: "green", keywords: "memo note template", image: appImages["Quick Memo"] }
     ];
     const fallbackAnnouncements = [
-      { title: "IDS Hubを公開しました", body: "便利なツールとゲームを順次追加していきます。", publishedAt: "2026-05-16" },
-      { title: "アカウント登録に対応しました", body: "無料登録後、Hub内のコンテンツを利用できます。", publishedAt: "2026-05-16" }
+      { title: "IDS Appsを公開しました", body: "便利なツールとゲームを順次追加していきます。", publishedAt: "2026-05-16" },
+      { title: "アカウント登録に対応しました", body: "無料登録後、コンテンツを利用できます。", publishedAt: "2026-05-16" }
     ];
 
     function getTheme() {
-      return localStorage.getItem("idsHubTheme") || "light";
+      return localStorage.getItem("idsAppsTheme") || "light";
     }
 
     function applyTheme(theme) {
       document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("idsHubTheme", theme);
+      localStorage.setItem("idsAppsTheme", theme);
     }
 
     applyTheme(getTheme());
@@ -1078,7 +1302,7 @@
       authMode = mode;
       const isSignup = mode === "signup";
       authTitle.textContent = isSignup ? "無料登録" : "ログイン";
-      authLead.textContent = isSignup ? "アカウントを作成すると、Hub内のコンテンツを利用できます。" : "登録済みのメールアドレスとパスワードを入力してください。";
+      authLead.textContent = isSignup ? "アカウントを作成すると、コンテンツを利用できます。" : "登録済みのメールアドレスとパスワードを入力してください。";
       nameField.style.display = isSignup ? "grid" : "none";
       authName.required = isSignup;
       authSubmit.textContent = isSignup ? "登録する" : "ログイン";
@@ -1139,16 +1363,70 @@
       }).join("");
     }
 
+    function getToolImage(tool, index) {
+      return appImagesById[tool.id] || appImages[tool.name] || tool.image || appImagePool[index % appImagePool.length];
+    }
+
+    function todayKey() {
+      return new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Tokyo" });
+    }
+
+    function seededValue(value, seed) {
+      const input = String(seed) + ":" + String(value);
+      let hash = 2166136261;
+      for (let i = 0; i < input.length; i += 1) {
+        hash ^= input.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    }
+
+    function pickDailyTools(tools, limit, excludeIds = []) {
+      const excluded = new Set(excludeIds);
+      const seed = todayKey();
+      return tools
+        .filter((tool) => !excluded.has(tool.id))
+        .map((tool) => ({ tool, score: seededValue(tool.id || tool.name, seed) }))
+        .sort((a, b) => a.score - b.score)
+        .slice(0, limit)
+        .map((item) => item.tool);
+    }
+
+    function pickFeaturedTools(tools) {
+      const enabledTools = tools.filter((tool) => tool.enabled !== false);
+      const fixedIds = Array.isArray(homeSettings.featuredToolIds) ? homeSettings.featuredToolIds : [];
+      if (homeSettings.featuredMode === "fixed" && fixedIds.length) {
+        const fixedTools = fixedIds
+          .map((id) => enabledTools.find((tool) => tool.id === id))
+          .filter(Boolean)
+          .slice(0, 3);
+        return fixedTools.concat(pickDailyTools(enabledTools, 3 - fixedTools.length, fixedTools.map((tool) => tool.id))).slice(0, 3);
+      }
+      return pickDailyTools(enabledTools, 3);
+    }
+
+    function renderFeaturedTools(tools) {
+      const featuredTools = pickFeaturedTools(tools);
+      const fixedIds = Array.isArray(homeSettings.featuredToolIds) ? homeSettings.featuredToolIds : [];
+      featuredModeLabel.textContent = homeSettings.featuredMode === "fixed" && fixedIds.length ? "管理画面で固定" : "毎日更新";
+      featuredList.innerHTML = featuredTools.map((tool, index) => {
+        const image = getToolImage(tool, index);
+        return '<article class="card featured-card locked" data-category="' + escapeHtml(tool.category) + '" data-keywords="' + escapeHtml(tool.keywords || "") + '"><div class="card-top"><span class="badge">' + escapeHtml(tool.label || "ツール") + '</span></div><img class="card-art" src="' + escapeHtml(image) + '" alt="' + escapeHtml(tool.name) + 'のロゴ"><h3>' + escapeHtml(tool.name) + '</h3><p>' + escapeHtml(tool.description) + '</p><button class="primary-button" type="button" data-requires-login>開く</button></article>';
+      }).join("");
+    }
+
     function renderTools(tools) {
       toolUrls = {};
       toolRegistry = {};
       heroToolCount.textContent = String(tools.length);
-      toolGrid.innerHTML = tools.map((tool) => {
+      toolGrid.innerHTML = tools.map((tool, index) => {
         const color = ["green", "yellow", "red", "dark"].includes(tool.color) ? tool.color : "";
+        const image = getToolImage(tool, index);
         toolUrls[tool.name] = tool.url || "#";
         toolRegistry[tool.name] = tool;
-        return '<article class="card locked" data-category="' + escapeHtml(tool.category) + '" data-keywords="' + escapeHtml(tool.keywords || "") + '"><div class="card-top"><div class="tool-icon ' + escapeHtml(color) + '"><svg class="icon" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg></div><span class="badge">' + escapeHtml(tool.label || "ツール") + '</span></div><h3>' + escapeHtml(tool.name) + '</h3><p>' + escapeHtml(tool.description) + '</p><button class="primary-button" type="button" data-requires-login>開く</button></article>';
+        return '<article class="card locked" data-category="' + escapeHtml(tool.category) + '" data-keywords="' + escapeHtml(tool.keywords || "") + '"><div class="card-top"><span class="badge">' + escapeHtml(tool.label || "ツール") + '</span></div><img class="card-art" src="' + escapeHtml(image) + '" alt="' + escapeHtml(tool.name) + 'のロゴ"><h3>' + escapeHtml(tool.name) + '</h3><p>' + escapeHtml(tool.description) + '</p><button class="primary-button" type="button" data-requires-login>開く</button></article>';
       }).join("");
+      renderFeaturedTools(tools);
 
       cards = [...document.querySelectorAll(".card")];
       bindToolButtons();
@@ -1160,7 +1438,14 @@
 
     async function loadTools() {
       try {
-        const snapshot = await getDocs(collection(db, "tools"));
+        const [snapshot, settingsSnapshot] = await Promise.all([
+          getDocs(collection(db, "tools")),
+          getDoc(doc(db, "settings", "home")).catch((error) => {
+            console.warn("Failed to load home settings, using daily recommendations.", error);
+            return null;
+          })
+        ]);
+        homeSettings = settingsSnapshot?.exists() ? { ...homeSettings, ...settingsSnapshot.data() } : homeSettings;
         const tools = snapshot.docs
           .map((item) => ({ id: item.id, ...item.data() }))
           .filter((tool) => tool.enabled !== false)
@@ -1231,7 +1516,7 @@
       if (isStockGameTool(tool)) {
         url = buildStockGameUrl(tool);
         markStockGameLinked()
-          .then(() => showToast("投資ゲームとHubアカウントを同じメールで連携します。"))
+          .then(() => showToast("投資ゲームとIDS Appsアカウントを同じメールで連携します。"))
           .catch((error) => {
             console.warn("Failed to mark stock game link.", error);
             showToast("投資ゲームを開きます。連携状態の保存はあとで再試行してください。");
@@ -1248,7 +1533,7 @@
 
     function setLoggedIn(user) {
       currentUser = user;
-      sessionStorage.setItem("idsHubUser", JSON.stringify(user));
+      sessionStorage.setItem("idsAppsUser", JSON.stringify(user));
       document.querySelectorAll(".card.locked").forEach((card) => card.classList.remove("locked"));
       lockedBannerText.textContent = (user.name || user.email) + " としてログイン中";
       lockedBannerBtn.classList.add("hidden");
@@ -1262,7 +1547,7 @@
 
     function setLoggedOut() {
       currentUser = null;
-      sessionStorage.removeItem("idsHubUser");
+      sessionStorage.removeItem("idsAppsUser");
       document.querySelectorAll(".card").forEach((card) => card.classList.add("locked"));
       lockedBannerText.textContent = "コンテンツの利用にはアカウント登録が必要です。ログインすると各カードから直接開けます。";
       lockedBannerBtn.classList.remove("hidden");
@@ -1387,7 +1672,7 @@
     setAuthMode("login");
     loadTools();
     loadAnnouncements();
-    const savedUser = sessionStorage.getItem("idsHubUser");
+    const savedUser = sessionStorage.getItem("idsAppsUser");
     if (savedUser) {
       setLoggedIn(JSON.parse(savedUser));
     }

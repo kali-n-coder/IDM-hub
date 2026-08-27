@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IDS Hub Admin</title>
+  <title>IDS Apps Admin</title>
   <style>
     :root {
       --bg: #f0f4f9;
@@ -416,6 +416,60 @@
       color: var(--warning);
     }
 
+    .settings-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .radio-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .choice-card,
+    .check-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) - 4px);
+      background: #fff;
+    }
+
+    .choice-card {
+      flex: 1 1 220px;
+    }
+
+    .choice-card input,
+    .check-card input {
+      width: auto;
+      min-height: auto;
+      margin-top: 3px;
+    }
+
+    .choice-card strong,
+    .check-card strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    .choice-card span,
+    .check-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
     /* ========== トースト通知 ========== */
     .toast {
       position: fixed;
@@ -509,7 +563,7 @@
     <a class="brand" href="index.html">
       <img class="mark" src="assets/ids-logo.png" alt="IDS">
       <span>
-        <strong>IDS Hub Admin</strong>
+        <strong>IDS Apps Admin</strong>
         <small>Content Control</small>
       </span>
     </a>
@@ -523,7 +577,7 @@
     <section class="hero" id="loginHero">
       <div>
         <h1>管理画面へようこそ</h1>
-        <p>IDS Hubの公開コンテンツ、ユーザー、お知らせを一元管理できます。</p>
+        <p>IDS Appsの公開コンテンツ、ユーザー、お知らせを一元管理できます。</p>
       </div>
     </section>
 
@@ -582,6 +636,35 @@
 
       <!-- ツール管理ビュー -->
       <div class="view active" id="toolsView">
+        <form class="panel settings-panel" id="featuredForm">
+          <div>
+            <h3>今日のおすすめ設定</h3>
+            <p class="text-muted">トップページの「今日のおすすめ」に表示するコンテンツを管理します。固定しない場合は、公開中のコンテンツから毎日自動で3件選ばれます。</p>
+          </div>
+          <div class="radio-row">
+            <label class="choice-card">
+              <input type="radio" name="featuredMode" value="daily" checked>
+              <span>
+                <strong>毎日自動で選ぶ</strong>
+                <span>日付ごとにランダムでおすすめを切り替えます。</span>
+              </span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="featuredMode" value="fixed">
+              <span>
+                <strong>固定する</strong>
+                <span>選択したコンテンツをおすすめ欄に固定します。</span>
+              </span>
+            </label>
+          </div>
+          <div class="field">
+            <label>固定するコンテンツ (最大3件)</label>
+            <div class="check-grid" id="featuredToolChoices"></div>
+          </div>
+          <div class="actions">
+            <button class="button primary" type="submit">💾 おすすめ設定を保存</button>
+          </div>
+        </form>
         <div class="view-grid">
           <form class="panel stack" id="toolForm">
             <h3>ツール追加・編集</h3>
@@ -760,6 +843,7 @@
     let users = [];
     let tools = [];
     let announcements = [];
+    let homeSettings = { featuredMode: "daily", featuredToolIds: [] };
 
     function showToast(message) {
       toast.textContent = message;
@@ -810,7 +894,7 @@
         throw new Error("管理者ログインに失敗しました。");
       }
 
-      sessionStorage.setItem("idsHubAdmin", JSON.stringify({ email, name: user.name || "" }));
+      sessionStorage.setItem("idsAppsAdmin", JSON.stringify({ email, name: user.name || "" }));
       loginContainer.classList.add("hidden");
       loginHero.classList.add("hidden");
       dashboard.classList.remove("hidden");
@@ -819,21 +903,27 @@
     }
 
     async function loadAll() {
-      const [userSnapshot, toolSnapshot, announcementSnapshot] = await Promise.all([
+      const [userSnapshot, toolSnapshot, announcementSnapshot, homeSettingsSnapshot] = await Promise.all([
         getDocs(collection(db, "users")),
         getDocs(collection(db, "tools")),
-        getDocs(collection(db, "announcements"))
+        getDocs(collection(db, "announcements")),
+        getDoc(doc(db, "settings", "home")).catch((error) => {
+          console.warn("Failed to load home settings, using defaults.", error);
+          return null;
+        })
       ]);
 
       users = userSnapshot.docs.map((item) => ({ id: item.id, ...item.data() })).sort((a, b) => a.email.localeCompare(b.email));
       tools = toolSnapshot.docs.map((item) => ({ id: item.id, ...item.data() })).sort((a, b) => Number(a.order || 999) - Number(b.order || 999));
       announcements = announcementSnapshot.docs.map((item) => ({ id: item.id, ...item.data() })).sort((a, b) => Number(a.order || 999) - Number(b.order || 999));
+      homeSettings = homeSettingsSnapshot?.exists() ? { ...homeSettings, ...homeSettingsSnapshot.data() } : homeSettings;
       document.querySelector("#toolTotal").textContent = String(tools.filter((tool) => tool.enabled !== false).length);
       document.querySelector("#userTotal").textContent = String(users.length);
       document.querySelector("#adminTotal").textContent = String(users.filter((user) => user.role === "admin").length);
       document.querySelector("#announcementTotal").textContent = String(announcements.filter((item) => item.enabled !== false).length);
       renderUsers();
       renderTools();
+      renderFeaturedSettings();
       renderAnnouncements();
     }
 
@@ -856,6 +946,24 @@
           </td>
         </tr>
       `).join("");
+    }
+
+    function renderFeaturedSettings() {
+      const fixedIds = new Set(Array.isArray(homeSettings.featuredToolIds) ? homeSettings.featuredToolIds : []);
+      document.querySelectorAll("[name='featuredMode']").forEach((input) => {
+        input.checked = input.value === (homeSettings.featuredMode || "daily");
+      });
+      document.querySelector("#featuredToolChoices").innerHTML = tools
+        .filter((tool) => tool.enabled !== false)
+        .map((tool) => `
+          <label class="check-card">
+            <input type="checkbox" name="featuredToolIds" value="${escapeHtml(tool.id)}" ${fixedIds.has(tool.id) ? "checked" : ""}>
+            <span>
+              <strong>${escapeHtml(tool.name)}</strong>
+              <span>${escapeHtml(tool.label || tool.category || "")}</span>
+            </span>
+          </label>
+        `).join("");
     }
 
     function renderUsers() {
@@ -937,6 +1045,27 @@
       document.querySelector("#toolId").value = "";
       await loadAll();
       showToast("✅ ツールを保存しました。");
+    });
+
+    document.querySelector("#featuredForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        const formData = new FormData(event.currentTarget);
+        const featuredMode = String(formData.get("featuredMode") || "daily");
+        const featuredToolIds = [...formData.getAll("featuredToolIds")].slice(0, 3);
+
+        await setDoc(doc(db, "settings", "home"), {
+          featuredMode,
+          featuredToolIds,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        await loadAll();
+        showToast(featuredMode === "fixed" ? "✅ 今日のおすすめを固定しました。" : "✅ 今日のおすすめを毎日自動にしました。");
+      } catch (error) {
+        console.error("Failed to save featured settings.", error);
+        showToast("❌ おすすめ設定の保存に失敗しました。Firestoreルールが未反映の可能性があります。");
+      }
     });
 
     document.querySelector("#userForm").addEventListener("submit", async (event) => {
@@ -1061,6 +1190,15 @@
     });
 
     document.addEventListener("change", async (event) => {
+      if (event.target.name === "featuredToolIds") {
+        const selected = [...document.querySelectorAll("[name='featuredToolIds']:checked")];
+        if (selected.length > 3) {
+          event.target.checked = false;
+          showToast("今日のおすすめに固定できるのは最大3件です。");
+        }
+        return;
+      }
+
       const userId = event.target.dataset.userRole;
       if (userId) {
         await updateDoc(doc(db, "users", userId), { role: event.target.value, updatedAt: serverTimestamp() });
@@ -1087,11 +1225,11 @@
     });
 
     logoutButton.addEventListener("click", () => {
-      sessionStorage.removeItem("idsHubAdmin");
+      sessionStorage.removeItem("idsAppsAdmin");
       location.reload();
     });
 
-    if (sessionStorage.getItem("idsHubAdmin")) {
+    if (sessionStorage.getItem("idsAppsAdmin")) {
       loginContainer.classList.add("hidden");
       loginHero.classList.add("hidden");
       dashboard.classList.remove("hidden");
